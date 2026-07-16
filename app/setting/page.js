@@ -1,5 +1,6 @@
 // app/settings/page.js
-import InstagramLogin from "@/components/InstagramLogin";
+
+import InstagramLogin from "../connect/page";
 
 export default function SettingsPage() {
   return (
