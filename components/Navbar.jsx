@@ -1,27 +1,42 @@
 "use client";
 
 import Link from "next/link";
-import { FiSearch, FiMenu } from "react-icons/fi";
+import Image from "next/image"; // Image component import karo
+import LanguageToggle from "@/components/LanguageToggle";
+import { useLanguage } from "@/context/LanguageContext"; // Language ke liye
 
 export default function Navbar() {
+  const { lang } = useLanguage();
+
   return (
-    <nav className="sticky top-0 z-50 bg-white shadow-md">
+    <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-100">
       <div className="max-w-7xl mx-auto px-5 py-4 flex justify-between items-center">
-        <Link href="/" className="text-3xl font-bold text-red-600">
-          The Peak Content
+        {/* Logo Section */}
+        <Link href="/" className="flex items-center gap-2">
+          {/* Logo image public folder se load hogi */}
+          <Image
+            src="/Peak_Content_logo1.png"
+            alt="The Peak Content"
+            width={40}
+            height={40}
+            className="w-10 h-10 object-contain"
+          />
+          <span className="text-2xl md:text-3xl font-extrabold tracking-tighter text-zinc-950">
+            The Peak <span className="text-red-600">Content</span>
+          </span>
         </Link>
 
-        <div className="hidden md:flex gap-8 font-medium">
-          <Link href="/en">Home</Link>
-          <Link href="/en/crime">Crime</Link>
-          <Link href="/en/politics">Politics</Link>
-          <Link href="/en/sports">Sports</Link>
-          <Link href="/en/health">Health</Link>
-        </div>
+        {/* Right side items */}
+        <div className="flex items-center gap-6">
+          <LanguageToggle />
 
-        <div className="flex gap-5 text-2xl">
-          <FiSearch />
-          <FiMenu className="md:hidden" />
+          {/* Contact Link */}
+          <Link
+            href="/contact"
+            className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 hover:text-red-600 transition-colors"
+          >
+            {lang === "hi" ? "संपर्क करें" : "Contact Us"}
+          </Link>
         </div>
       </div>
     </nav>
