@@ -12,8 +12,7 @@ export default function Hero() {
       titleRed: "hits home.",
       desc: "Delivering the most significant updates—from crime and current affairs to essential market movements. Precision in every pixel.",
       btn: "Read Daily Feed",
-      stat1: "Live Updates",
-      stat2: "Verified Facts",
+      breaking: "BREAKING NEWS FEED",
     },
     hi: {
       tag: "हर कहानी का शिखर",
@@ -21,56 +20,77 @@ export default function Hero() {
       titleRed: "सीधा असर करें।",
       desc: "देश और दुनिया की हर बड़ी खबर, बिना किसी शोर के। अपराध, राजनीति और बाज़ार के अपडेट्स, एकदम सटीक।",
       btn: "आज की खबरें देखें",
-      stat1: "लाइव अपडेट्स",
-      stat2: "सत्यापित तथ्य",
+      breaking: "ब्रेकिंग न्यूज़ फीड",
     },
   };
 
   const content = lang === "hi" ? t.hi : t.en;
 
   return (
-    <section className="relative w-full bg-zinc-950 text-white py-24 overflow-hidden border-b border-zinc-900">
-      {/* Abstract Background Elements */}
-      <div className="absolute top-0 right-0 w-1/2 h-full bg-red-600/5 blur-[150px] rounded-full -mr-20"></div>
+    <section className="relative w-full bg-zinc-950 text-white py-28 md:py-36 overflow-hidden border-b border-zinc-900/80">
+      {/* Background Image - Now Clear & Bright */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src="/hero-bg.jpg"
+          alt="News Hero Background"
+          className="w-full h-full object-cover object-center opacity-85 scale-100"
+        />
+        {/* Soft Dark Vignette Overlay (Text साफ पढ़ने के लिए सिर्फ किनारों पर हल्का शेड) */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050507]/90 via-[#050507]/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#050507] via-transparent to-[#050507]/70" />
+      </div>
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="flex flex-col lg:flex-row gap-16 items-center">
-          {/* Left Content */}
-          <div className="flex-1 space-y-8">
-            <span className="inline-block py-1 px-3 border border-red-600/30 text-red-500 text-[10px] font-black uppercase tracking-[0.3em] bg-red-600/10">
-              {content.tag}
+      {/* Dynamic Editorial Background Glows */}
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-red-600/20 blur-[180px] rounded-full pointer-events-none z-10" />
+
+      <div className="max-w-7xl mx-auto px-6 relative z-20">
+        {/* Top Ticker Bar Badge */}
+        <div className="inline-flex items-center gap-3 py-1.5 px-4 rounded-full bg-zinc-900/90 border border-zinc-800 backdrop-blur-md mb-10 shadow-lg">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span>
+          </span>
+          <span className="text-[11px] font-extrabold uppercase tracking-[0.25em] text-zinc-300">
+            {content.breaking}
+          </span>
+        </div>
+
+        {/* Main Content */}
+        <div className="max-w-4xl space-y-8">
+          <div className="space-y-4">
+            <span className="inline-block text-red-500 text-xs font-black uppercase tracking-[0.35em]">
+              // {content.tag}
             </span>
-
-            <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.9]">
+            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] text-zinc-100 drop-shadow-md">
               {content.title} <br />
-              <span className="text-red-600">{content.titleRed}</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-500 to-red-600 drop-shadow-sm">
+                {content.titleRed}
+              </span>
             </h1>
-
-            <p className="text-xl text-zinc-400 max-w-xl leading-relaxed">
-              {content.desc}
-            </p>
-
-            <button className="bg-white text-zinc-950 px-10 py-4 font-black uppercase text-xs tracking-[0.25em] hover:bg-red-600 hover:text-white transition-all duration-300">
-              {content.btn}
-            </button>
           </div>
 
-          {/* Right Side Stats */}
-          <div className="w-full lg:w-auto grid grid-cols-2 gap-4">
-            <div className="bg-zinc-900/50 p-8 border border-zinc-800">
-              <span className="text-red-600 text-4xl font-black block">
-                24/7
-              </span>
-              <p className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest mt-2">
-                {content.stat1}
-              </p>
-            </div>
-            <div className="bg-zinc-900/50 p-8 border border-zinc-800">
-              <span className="text-white text-4xl font-black block">100%</span>
-              <p className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest mt-2">
-                {content.stat2}
-              </p>
-            </div>
+          <p className="text-lg sm:text-xl text-zinc-200 max-w-2xl font-normal leading-relaxed drop-shadow">
+            {content.desc}
+          </p>
+
+          <div className="pt-2">
+            <button className="group relative inline-flex items-center gap-4 bg-red-600 text-white px-9 py-4 font-black uppercase text-xs tracking-[0.25em] overflow-hidden rounded-sm transition-all duration-300 hover:bg-white hover:text-zinc-950 shadow-xl shadow-red-600/40">
+              <span className="relative z-10">{content.btn}</span>
+              <svg
+                className="w-4 h-4 relative z-10 transition-transform duration-300 group-hover:translate-x-1.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={3}
+                  d="M14 5l7 7m0 0l-7 7m7-7H3"
+                />
+              </svg>
+              <div className="absolute inset-0 bg-gradient-to-r from-red-700 to-red-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </button>
           </div>
         </div>
       </div>
