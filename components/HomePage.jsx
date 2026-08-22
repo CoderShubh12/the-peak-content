@@ -14,7 +14,7 @@ export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState("general");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // New State for Modal (Popup to read news on site)
+  // State for Modal (Popup to read news on site)
   const [activeArticle, setActiveArticle] = useState(null);
 
   const categories = [
@@ -25,6 +25,23 @@ export default function HomePage() {
     { id: "technology", name: lang === "hi" ? "तकनीक" : "Technology" },
     { id: "health", name: lang === "hi" ? "स्वास्थ्य" : "Health" },
   ];
+
+  // Helper function to enrich short API text into a full professional news story
+  const generateFullContent = (art, langMode) => {
+    if (
+      art.content &&
+      art.content.length > 150 &&
+      !art.content.includes("chars")
+    ) {
+      return art.content;
+    }
+
+    if (langMode === "hi") {
+      return `द पीक कंटेंट न्यूज़रूम की विशेष रिपोर्ट। ${art.title} से जुड़े ताज़ा घटनाक्रम और विश्लेषणात्मक तथ्यों के अनुसार, यह मामला वर्तमान समय में काफी चर्चा का विषय बना हुआ है। विशेषज्ञों का मानना है कि इसके दूरगामी परिणाम देखने को मिल सकते हैं। ${art.description || "इस खबर पर हमारी विशेष नजर बनी हुई है, जैसे ही नए अपडेट आएंगे, पाठकों तक सबसे पहले पहुँचाए जाएंगे।"}`;
+    } else {
+      return `Exclusive dispatch by The Peak Content Newsroom. According to recent developments surrounding "${art.title}", industry analysts and experts are closely monitoring the situation. This breaking update highlights core shifts in current affairs. ${art.description || "Our editorial desk is keeping a close eye on this developing story for further updates."}`;
+    }
+  };
 
   useEffect(() => {
     async function fetchNewsByCategory() {
@@ -55,10 +72,7 @@ export default function HomePage() {
             url: art.url || "#",
             description:
               art.description || "Read the full story at the source.",
-            content:
-              art.content ||
-              art.description ||
-              "No additional content available.",
+            content: generateFullContent(art, lang),
             publishedAt: art.publishedAt
               ? new Date(art.publishedAt).toLocaleDateString()
               : "Just Now",
@@ -176,7 +190,7 @@ export default function HomePage() {
           </div>
         ) : (
           <div className="space-y-16">
-            {/* Featured Hero Article (Click opens modal instead of external link) */}
+            {/* Featured Hero Article */}
             {featuredArticle && (
               <div
                 onClick={() => setActiveArticle(featuredArticle)}
@@ -239,7 +253,7 @@ export default function HomePage() {
               </div>
             )}
 
-            {/* Secondary Articles Grid - Wrapping with onClick to trigger modal */}
+            {/* Secondary Articles Grid */}
             {secondaryArticles.length > 0 && (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {secondaryArticles.map((item, index) => (
@@ -257,7 +271,71 @@ export default function HomePage() {
         )}
       </section>
 
-      {/* --- NEWS ARTICLE POPUP MODAL --- */}
+      {/* --- SEO FRIENDLY CONTENT & ABOUT SECTION --- */}
+      <section className="max-w-7xl mx-auto px-6 py-16 border-t border-zinc-900 mt-10">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <span className="text-[11px] font-black uppercase tracking-[0.3em] text-red-500 block mb-2">
+              //{" "}
+              {lang === "hi"
+                ? "द पीक कंटेंट के बारे में"
+                : "About The Peak Content"}
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-black tracking-tighter text-zinc-100 mb-4">
+              {lang === "hi"
+                ? "सबसे पहले, सबसे सही - आपकी भरोसेमंद न्यूज़ वेबसाइट"
+                : "Sabse Pehle, Sabse Sahi - Your Trusted News Portal"}
+            </h2>
+            <p className="text-zinc-400 text-sm leading-relaxed mb-4">
+              {lang === "hi"
+                ? "The Peak Content (thepeakcontent.in) एक अग्रणी डिजिटल न्यूज़ प्लेटफ़ॉर्म है जो आपको देश-विदेश की ताज़ा खबरें (Todays News), ब्रेकिंग न्यूज़ (Breaking News), लाइव अपडेट्स (Live News), और बिज़नेस, टेक्नोलॉजी, खेल व मनोरंजन से जुड़े ट्रेंडिंग विश्लेषण प्रदान करता है।"
+                : "The Peak Content (thepeakcontent.in) is a premier digital news platform bringing you todays top stories, live news updates, breaking news, and in-depth analytical reports across politics, technology, business, sports, and entertainment."}
+            </p>
+            <p className="text-zinc-400 text-sm leading-relaxed">
+              {lang === "hi"
+                ? "हमारा उद्देश्य पाठकों तक सटीक, निष्पक्ष और समय पर खबरें पहुँचाना है, ताकि आप हर महत्वपूर्ण घटना से हमेशा अपडेट रहें।"
+                : "Our core mission is to deliver accurate, unbiased, and fast-paced journalism straight to your screens, ensuring you stay ahead with verified reporting."}
+            </p>
+          </div>
+
+          {/* SEO Keyword Rich Quick Info Card */}
+          <div className="bg-zinc-900/40 border border-zinc-800 rounded-2xl p-6 sm:p-8 backdrop-blur-xl">
+            <h3 className="text-xs font-bold text-red-400 mb-4 uppercase tracking-wider font-mono">
+              {lang === "hi"
+                ? "📌 मुख्य कवरेज श्रेणियां (Top Categories)"
+                : "📌 Core Coverage Areas"}
+            </h3>
+            <ul className="space-y-3 text-xs sm:text-sm text-zinc-300">
+              <li className="flex items-center gap-2">
+                <span className="text-red-500 font-bold">▸</span>
+                {lang === "hi"
+                  ? "ताज़ा खबरें और आज की बड़ी हेडलाइंस (Todays Top News)"
+                  : "Todays News & Top Headlines"}
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="text-red-500 font-bold">▸</span>
+                {lang === "hi"
+                  ? "लाइव न्यूज़ अपडेट्स और ब्रेकिंग स्टोरीज (Live News & Breaking Stories)"
+                  : "Live News Updates & Breaking Stories"}
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="text-red-500 font-bold">▸</span>
+                {lang === "hi"
+                  ? "शेयर बाज़ार, सोना-चांदी और व्यापारिक ट्रेंड्स (Business & Market Trends)"
+                  : "Business, Stock Market & Gold/Silver Rates"}
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="text-red-500 font-bold">▸</span>
+                {lang === "hi"
+                  ? "टेक्नोलॉजी, गैजेट्स और मनोरंजन की दुनिया (Tech & Entertainment)"
+                  : "Technology Gadgets & Entertainment News"}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* --- NEWS ARTICLE POPUP MODAL WITH INTERNAL LINKING --- */}
       {activeArticle && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
           <div className="bg-zinc-900 border border-zinc-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 relative shadow-2xl">
@@ -290,13 +368,32 @@ export default function HomePage() {
               />
             </div>
 
-            {/* Content / Description */}
-            <div className="space-y-4 text-zinc-300 text-sm sm:text-base leading-relaxed mb-8">
+            {/* Full Expanded Content */}
+            <div className="space-y-4 text-zinc-300 text-sm sm:text-base leading-relaxed mb-6">
               <p>{activeArticle.content}</p>
-              <p className="text-zinc-400 text-xs">
-                {activeArticle.description}
-              </p>
             </div>
+
+            {/* Internal Linking Section inside Modal */}
+            {secondaryArticles.length > 0 && (
+              <div className="mt-6 pt-4 border-t border-zinc-800 mb-6">
+                <h4 className="text-xs font-bold text-red-500 uppercase tracking-widest mb-3">
+                  {lang === "hi"
+                    ? "संबंधित खबरें (Related Stories)"
+                    : "Related Stories"}
+                </h4>
+                <div className="space-y-2">
+                  {secondaryArticles.slice(0, 2).map((item, idx) => (
+                    <div
+                      key={idx}
+                      onClick={() => setActiveArticle(item)}
+                      className="text-xs text-zinc-300 hover:text-red-400 cursor-pointer line-clamp-1 transition-colors"
+                    >
+                      🔹 {item.title}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Footer Actions */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-zinc-800">
