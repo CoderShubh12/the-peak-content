@@ -19,8 +19,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "The Peak Content",
-  description: "Sabse Pehle, Sabse Sahi - Breaking News & Trends",
+  title: "The Peak Content - Todays News, Latest News & Live Updates",
+  description:
+    "Get the latest news, todays top breaking news, live news updates, and deep analytical reports on politics, markets, and trends in India and worldwide.",
+  keywords:
+    "todays news, latest news, live news, breaking news, current affairs, the peak content",
 };
 
 export default function RootLayout({ children }) {
@@ -29,7 +32,7 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans">
+      <body className="min-h-full flex flex-col font-sans bg-[#050507] text-zinc-50">
         <LanguageProvider>
           {/* Global Components: Har page par dikhenge */}
           {/* <BreakingNews /> */}
