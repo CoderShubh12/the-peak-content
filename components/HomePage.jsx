@@ -26,6 +26,39 @@ export default function HomePage() {
     { id: "health", name: lang === "hi" ? "स्वास्थ्य" : "Health" },
   ];
 
+  // Google Structured Data (JSON-LD) for News Media Organization & Website
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "NewsMediaOrganization",
+        "@id": "https://thepeakcontent.com/#organization",
+        name: "The Peak Content",
+        url: "https://thepeakcontent.com",
+        logo: {
+          "@type": "ImageObject",
+          "@id": "https://thepeakcontent.com/#logo",
+          url: "https://thepeakcontent.com/Peak_Content_logo1.png",
+          caption: "The Peak Content",
+        },
+        sameAs: [
+          "https://www.instagram.com/the_peak_content/",
+          "https://www.facebook.com/profile.php?id=61591520395394",
+        ],
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://thepeakcontent.com/#website",
+        url: "https://thepeakcontent.com",
+        name: "The Peak Content",
+        publisher: {
+          "@id": "https://thepeakcontent.com/#organization",
+        },
+        inLanguage: "en-US",
+      },
+    ],
+  };
+
   // Helper function to enrich short API text into a full professional news story
   const generateFullContent = (art, langMode) => {
     if (
@@ -111,6 +144,12 @@ export default function HomePage() {
 
   return (
     <main className="bg-[#050507] text-zinc-50 min-h-screen selection:bg-red-600 selection:text-white relative">
+      {/* Google Structured Data Script Injection */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+
       <Hero />
 
       {debugError && (
