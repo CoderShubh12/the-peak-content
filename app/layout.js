@@ -35,6 +35,11 @@ export default function RootLayout({ children }) {
     >
       <head>
         {/* Google tag (gtag.js) */}
+        <script
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key="ZzribDF9QgSea4n4Lui8VA"
+          async
+        ></script>
         <Script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-C56DBBVM1Y"
