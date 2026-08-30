@@ -10,7 +10,7 @@ export default function Hero() {
       tag: "The Peak of Every Story",
       title: "Reporting that",
       titleRed: "hits home.",
-      desc: "Delivering the most significant updates—from crime and current affairs to essential market movements. Precision in every pixel.",
+      desc: "Delivering the most significant updates from crime and current affairs to essential market movements. Precision in every pixel.",
       btn: "Read Daily Feed",
       breaking: "BREAKING NEWS FEED",
     },
