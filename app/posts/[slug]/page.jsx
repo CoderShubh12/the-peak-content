@@ -4,7 +4,7 @@ import { marked } from "marked";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-// Aapka purana static articles data (Fallback ke liye)
+// Purana static articles data (Fallback ke liye)
 const articlesData = {
   "claude-and-ai-models-problem-solving": {
     author: "The Peak Content Desk (Tech Bureau)",
@@ -150,7 +150,6 @@ export default async function BlogPostPage({ params }) {
     postDate = staticArticle.date;
     postCategory = "Opinions";
 
-    // Static sections ko HTML mein convert karke jod do
     htmlContent = `
       <p class="text-zinc-100 font-medium text-lg sm:text-xl">${staticArticle.intro}</p>
       
@@ -211,7 +210,7 @@ export default async function BlogPostPage({ params }) {
           {postTitle}
         </h1>
 
-        {/* Content Rendered (Either from DB or Static Fallback) */}
+        {/* Content Rendered */}
         <article
           className="prose prose-invert max-w-none text-zinc-300 text-base sm:text-lg leading-relaxed border-t border-zinc-900 pt-8
             prose-headings:text-red-400 prose-headings:font-bold prose-headings:pt-6

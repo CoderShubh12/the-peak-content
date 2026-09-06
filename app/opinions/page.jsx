@@ -2,11 +2,33 @@
 
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
+import { useState, useEffect } from "react";
 
 export default function OpinionsPage() {
   const { lang } = useLanguage();
+  const [dbPosts, setDbPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const articles = [
+  // Database se live posts fetch karna
+  useEffect(() => {
+    async function fetchDbPosts() {
+      try {
+        const res = await fetch("/api/posts");
+        const json = await res.json();
+        if (json.success && Array.isArray(json.data)) {
+          setDbPosts(json.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch database posts:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchDbPosts();
+  }, []);
+
+  // Static articles
+  const staticArticles = [
     {
       slug: "claude-and-ai-models-problem-solving",
       author:
@@ -23,6 +45,7 @@ export default function OpinionsPage() {
           : "In recent years, advanced AI models like Claude have demonstrated unprecedented capabilities in coding, logical reasoning, and complex problem-solving...",
       date: "August 23, 2026",
       readTime: "12 min read",
+      isDb: false,
     },
     {
       slug: "ai-and-indian-labor-market-challenges",
@@ -40,6 +63,7 @@ export default function OpinionsPage() {
           : "As automation accelerates, how the tech and manufacturing sectors across the country are expected to transform...",
       date: "August 22, 2026",
       readTime: "12 min read",
+      isDb: false,
     },
     {
       slug: "west-asia-turkey-geopolitical-flashpoints-2026",
@@ -57,6 +81,7 @@ export default function OpinionsPage() {
           : "From the Strait of Hormuz to Syrian airbases, analyzing the last 60 hours of high-stakes geopolitical shifts across West Asia and South Asia...",
       date: "August 23, 2026",
       readTime: "14 min read",
+      isDb: false,
     },
     {
       slug: "rise-of-autonomous-ai-agents-2026-business-revolution",
@@ -74,8 +99,21 @@ export default function OpinionsPage() {
           : "The era of simple chat interfaces is over. Autonomous AI agents that plan, decide, and execute entire workflows are transforming modern business...",
       date: "August 23, 2026",
       readTime: "12 min read",
+      isDb: false,
     },
   ];
+
+  const formattedDbPosts = dbPosts.map((post) => ({
+    slug: post.slug,
+    author: post.author || "The Peak Editorial Desk",
+    title: post.title,
+    snippet: post.content ? post.content.substring(0, 150) + "..." : "",
+    date: new Date(post.createdAt).toLocaleDateString(),
+    readTime: "5 min read",
+    isDb: true,
+  }));
+
+  const allArticles = [...formattedDbPosts, ...staticArticles];
 
   return (
     <main className="bg-[#050507] text-zinc-50 min-h-screen py-24 px-6 selection:bg-red-600 selection:text-white">
@@ -92,43 +130,70 @@ export default function OpinionsPage() {
           </h1>
         </div>
 
-        <div className="grid gap-8">
-          {articles.map((item, idx) => (
-            <Link
-              key={idx}
-              href={`/opinions/${item.slug}`}
-              className="group block bg-zinc-900/40 border border-zinc-800/80 hover:border-red-500/50 backdrop-blur-xl p-8 rounded-2xl transition-all duration-500 shadow-2xl relative overflow-hidden"
-            >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-red-600/5 rounded-full blur-3xl pointer-events-none" />
+        {loading ? (
+          <div className="text-zinc-500 font-mono text-sm py-12 text-center">
+            Loading editorial content...
+          </div>
+        ) : (
+          <div className="space-y-6">
+            <div className="text-xs font-mono text-zinc-500 bg-zinc-900/50 border border-zinc-800/60 p-3 rounded-lg flex justify-between items-center">
+              <span>Status: Connected</span>
+              <span>
+                Database Posts:{" "}
+                <strong className="text-red-400">{dbPosts.length}</strong> |
+                Static Articles:{" "}
+                <strong className="text-zinc-300">
+                  {staticArticles.length}
+                </strong>
+              </span>
+            </div>
 
-              <div className="flex items-center justify-between text-xs font-mono text-zinc-400 mb-4">
-                <span className="text-red-500 font-bold uppercase tracking-wider">
-                  {item.author}
-                </span>
-                <span>
-                  {item.date} • {item.readTime}
-                </span>
-              </div>
+            <div className="grid gap-8">
+              {allArticles.map((item, idx) => (
+                <Link
+                  key={idx}
+                  href={
+                    item.isDb ? `/posts/${item.slug}` : `/opinions/${item.slug}`
+                  }
+                  className="group block bg-zinc-900/40 border border-zinc-800/80 hover:border-red-500/50 backdrop-blur-xl p-8 rounded-2xl transition-all duration-500 shadow-2xl relative overflow-hidden"
+                >
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-red-600/5 rounded-full blur-3xl pointer-events-none" />
 
-              <h2 className="text-2xl sm:text-3xl font-black text-zinc-100 group-hover:text-red-400 transition-colors tracking-tight leading-tight mb-4">
-                {item.title}
-              </h2>
+                  <div className="flex items-center justify-between text-xs font-mono text-zinc-400 mb-4">
+                    <span className="text-red-500 font-bold uppercase tracking-wider flex items-center gap-2">
+                      {item.author}
+                      {item.isDb && (
+                        <span className="bg-red-500/10 text-red-400 text-[10px] px-2 py-0.5 rounded border border-red-500/20 font-mono">
+                          Live DB
+                        </span>
+                      )}
+                    </span>
+                    <span>
+                      {item.date} • {item.readTime}
+                    </span>
+                  </div>
 
-              <p className="text-zinc-300 text-sm sm:text-base leading-relaxed mb-6">
-                {item.snippet}
-              </p>
+                  <h2 className="text-2xl sm:text-3xl font-black text-zinc-100 group-hover:text-red-400 transition-colors tracking-tight leading-tight mb-4">
+                    {item.title}
+                  </h2>
 
-              <div className="inline-flex items-center gap-2 text-xs font-bold text-red-500 uppercase tracking-widest group-hover:text-white transition-colors">
-                <span>
-                  {lang === "hi" ? "पूरा लेख पढ़ें" : "Read Full Column"}
-                </span>
-                <span className="transition-transform duration-300 group-hover:translate-x-1">
-                  →
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
+                  <p className="text-zinc-300 text-sm sm:text-base leading-relaxed mb-6">
+                    {item.snippet}
+                  </p>
+
+                  <div className="inline-flex items-center gap-2 text-xs font-bold text-red-500 uppercase tracking-widest group-hover:text-white transition-colors">
+                    <span>
+                      {lang === "hi" ? "पूरा लेख पढ़ें" : "Read Full Column"}
+                    </span>
+                    <span className="transition-transform duration-300 group-hover:translate-x-1">
+                      →
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </main>
   );
