@@ -117,39 +117,97 @@ const articlesData = {
   },
 };
 
-export default async function BlogPostPage({ params }) {
-  const { slug } = await params;
+// Helper function to fetch post metadata & content for both generateMetadata and page component
+async function fetchPostBySlug(slug) {
+  let postData = null;
 
-  let postTitle = "";
-  let postAuthor = "";
-  let postDate = "";
-  let postCategory = "";
-  let htmlContent = "";
-
-  // 1. Pehle Database mein check karo
   try {
     await dbConnect();
     const dbPost = await Post.findOne({ slug });
-
     if (dbPost) {
-      postTitle = dbPost.title;
-      postAuthor = dbPost.author || "The Peak Editorial Desk";
-      postDate = new Date(dbPost.createdAt).toLocaleDateString();
-      postCategory = dbPost.category || "Tech";
-      htmlContent = marked(dbPost.content || "");
+      postData = {
+        title: dbPost.title,
+        author: dbPost.author || "The Peak Editorial Desk",
+        date: new Date(dbPost.createdAt).toLocaleDateString(),
+        category: dbPost.category || "Tech",
+        content: dbPost.content,
+        isMarkdown: true,
+      };
     }
   } catch (error) {
-    console.log("DB fetch skipped or failed, checking static fallback...");
+    console.log("DB fetch skipped or failed...");
   }
 
-  // 2. Agar Database mein nahi mila, toh Static `articlesData` se uthao
-  if (!postTitle && articlesData[slug]) {
+  if (!postData && articlesData[slug]) {
     const staticArticle = articlesData[slug];
-    postTitle = staticArticle.title;
-    postAuthor = staticArticle.author;
-    postDate = staticArticle.date;
-    postCategory = "Opinions";
+    const fullText = `
+      ${staticArticle.intro}
+      ${staticArticle.section1Title} ${staticArticle.section1Text}
+      ${staticArticle.section2Title} ${staticArticle.section2Text}
+    `;
+    postData = {
+      title: staticArticle.title,
+      author: staticArticle.author,
+      date: staticArticle.date,
+      category: "Opinions",
+      content: fullText,
+      isStatic: true,
+      staticArticle,
+    };
+  }
 
+  return postData;
+}
+
+// 🚀 DYNAMIC SEO METADATA FOR GOOGLE & SOCIAL SHARING
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+  const post = await fetchPostBySlug(slug);
+
+  if (!post) {
+    return {
+      title: "Article Not Found | The Peak Content",
+      description: "The requested editorial piece could not be found.",
+    };
+  }
+
+  const plainDescription = post.content
+    .replace(/[#*`_]/g, "")
+    .substring(0, 160);
+
+  return {
+    title: `${post.title} | The Peak Content`,
+    description: plainDescription,
+    authors: [{ name: post.author }],
+    openGraph: {
+      title: post.title,
+      description: plainDescription,
+      type: "article",
+      siteName: "The Peak Content",
+      publishedTime: post.date,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: plainDescription,
+    },
+  };
+}
+
+export default async function BlogPostPage({ params }) {
+  const { slug } = await params;
+  const post = await fetchPostBySlug(slug);
+
+  if (!post) {
+    notFound();
+  }
+
+  let htmlContent = "";
+
+  if (post.isMarkdown) {
+    htmlContent = marked(post.content || "");
+  } else if (post.isStatic) {
+    const staticArticle = post.staticArticle;
     htmlContent = `
       <p class="text-zinc-100 font-medium text-lg sm:text-xl">${staticArticle.intro}</p>
       
@@ -176,11 +234,6 @@ export default async function BlogPostPage({ params }) {
     `;
   }
 
-  // 3. Agar dono jagah na mile, tab 404 throw karo
-  if (!postTitle) {
-    notFound();
-  }
-
   return (
     <main className="bg-[#050507] text-zinc-50 min-h-screen py-24 px-6 selection:bg-red-600 selection:text-white">
       <div className="max-w-3xl mx-auto space-y-8">
@@ -195,19 +248,19 @@ export default async function BlogPostPage({ params }) {
         {/* Meta Info */}
         <div className="flex items-center gap-3 text-xs font-mono text-zinc-400">
           <span className="text-red-500 font-bold uppercase tracking-wider">
-            {postAuthor}
+            {post.author}
           </span>
           <span>•</span>
-          <span>{postDate}</span>
+          <span>{post.date}</span>
           <span>•</span>
           <span className="bg-red-600/10 text-red-500 border border-red-500/20 px-2 py-0.5 rounded text-[10px] uppercase font-bold">
-            {postCategory}
+            {post.category}
           </span>
         </div>
 
         {/* Title */}
         <h1 className="text-3xl sm:text-5xl font-black text-zinc-100 tracking-tight leading-[1.1]">
-          {postTitle}
+          {post.title}
         </h1>
 
         {/* Content Rendered */}
