@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import Post from "@/models/Post";
+export const dynamic = "force-dynamic";
 
 // GET: Saare published posts fetch karne ke liye
 export async function GET(request) {
