@@ -1,5 +1,6 @@
 import dbConnect from "@/lib/mongodb";
 import Post from "@/models/Post";
+export const dynamic = "force-dynamic"; // Yeh ensure karega ki sitemap cache na ho
 
 // Jo static articles aapke code (articlesData) mein hardcoded hain unke slugs yahan rakhein
 const staticArticleSlugs = [
