@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import Post from "@/models/Post";
+export const dynamic = "force-dynamic";
 
 // DELETE: Remove a post by ID
 export async function DELETE(request, context) {
