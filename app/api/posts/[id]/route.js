@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
-import Post from "../../models/Post";
+import Post from "@/models/Post";
 
 // DELETE: Remove a post by ID
 export async function DELETE(request, { params }) {
