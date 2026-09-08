@@ -36,7 +36,6 @@ export default function TechBlogsContent() {
     fetchPosts();
   }, []);
 
-  // Filter posts based on category
   const filteredPosts =
     selectedCategory === "All Posts"
       ? posts
@@ -71,7 +70,7 @@ export default function TechBlogsContent() {
           </p>
         </div>
 
-        {/* Category Filter Pills (Exact screenshot style) */}
+        {/* Category Filter Pills */}
         <div className="flex flex-wrap gap-3">
           {categories.map((cat) => (
             <button
@@ -103,6 +102,17 @@ export default function TechBlogsContent() {
                 className="bg-zinc-900/40 border border-zinc-800/80 backdrop-blur-xl rounded-2xl p-6 flex flex-col justify-between hover:border-red-500/50 transition-all group"
               >
                 <div className="space-y-4">
+                  {/* Cover Image Rendering */}
+                  {post.image && (
+                    <div className="w-full h-48 rounded-xl overflow-hidden border border-zinc-800/80">
+                      <img
+                        src={post.image}
+                        alt={post.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
+                  )}
+
                   <div className="flex justify-between items-center text-xs font-mono text-zinc-500">
                     <span className="text-red-500 font-bold uppercase tracking-widest">
                       {post.category || "Tech"}
