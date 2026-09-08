@@ -126,7 +126,7 @@ export default function TechBlogsContent() {
                     The Peak Editorial Desk
                   </span>
                   <Link
-                    href={`/blog/${post.slug}`}
+                    href={`/posts/${post.slug}`}
                     className="text-xs font-bold uppercase tracking-widest text-red-500 hover:text-red-400 flex items-center gap-1 transition-colors"
                   >
                     Read Dispatch &rarr;
