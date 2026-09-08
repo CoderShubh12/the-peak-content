@@ -6,6 +6,8 @@ import { marked } from "marked";
 export default function CreatePostPage() {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("Tech");
+  const [subcategory, setSubcategory] = useState("coding");
+  const [image, setImage] = useState("");
   const [markdownContent, setMarkdownContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -15,8 +17,8 @@ export default function CreatePostPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title || !markdownContent) {
-      alert("Please fill in both the title and markdown content.");
+    if (!title || !markdownContent || !subcategory) {
+      alert("Please fill in the title, subcategory, and markdown content.");
       return;
     }
 
@@ -36,6 +38,8 @@ export default function CreatePostPage() {
           title,
           slug: generatedSlug,
           category,
+          subcategory,
+          image,
           content: markdownContent,
         }),
       });
@@ -43,11 +47,12 @@ export default function CreatePostPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.message || "Failed to publish post");
+        throw new Error(data.error || data.message || "Failed to publish post");
       }
 
       alert("Post published successfully to MongoDB!");
       setTitle("");
+      setImage("");
       setMarkdownContent("");
     } catch (error) {
       alert(error.message);
@@ -79,7 +84,7 @@ export default function CreatePostPage() {
         </div>
 
         {/* Form Meta Controls */}
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-4 gap-6">
           <div className="md:col-span-2">
             <label className="block text-xs font-bold uppercase tracking-widest text-zinc-400 mb-2">
               Article Title
@@ -108,6 +113,33 @@ export default function CreatePostPage() {
               <option value="AI & Development">AI & Development</option>
             </select>
           </div>
+
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-widest text-zinc-400 mb-2">
+              Subcategory
+            </label>
+            <input
+              type="text"
+              value={subcategory}
+              onChange={(e) => setSubcategory(e.target.value)}
+              placeholder="e.g., coding, ai-ml"
+              className="w-full bg-zinc-900 border border-zinc-800 p-4 text-white font-bold focus:border-red-600 outline-none rounded-xl transition-colors"
+            />
+          </div>
+        </div>
+
+        {/* Image URL Input */}
+        <div>
+          <label className="block text-xs font-bold uppercase tracking-widest text-zinc-400 mb-2">
+            Cover Image URL (Optional)
+          </label>
+          <input
+            type="text"
+            value={image}
+            onChange={(e) => setImage(e.target.value)}
+            placeholder="https://images.unsplash.com/..."
+            className="w-full bg-zinc-900 border border-zinc-800 p-4 text-white font-bold focus:border-red-600 outline-none rounded-xl transition-colors"
+          />
         </div>
 
         {/* Split Screen Editor & Live Preview */}
@@ -119,7 +151,7 @@ export default function CreatePostPage() {
               <span>Use standard #, **, `code`</span>
             </div>
             <textarea
-              rows="22"
+              rows="20"
               value={markdownContent}
               onChange={(e) => setMarkdownContent(e.target.value)}
               placeholder="# Beyond the Hydration Wall...&#10;&#10;Write your professional editorial content here using markdown..."
@@ -133,7 +165,7 @@ export default function CreatePostPage() {
               <span>Live Rendered Preview</span>
             </div>
             <div
-              className="w-full bg-zinc-900/40 border border-zinc-800 p-6 min-h-[500px] max-h-[580px] overflow-y-auto prose prose-invert max-w-none rounded-b-xl
+              className="w-full bg-zinc-900/40 border border-zinc-800 p-6 min-h-[480px] max-h-[550px] overflow-y-auto prose prose-invert max-w-none rounded-b-xl
                 prose-headings:text-red-400 prose-headings:font-bold 
                 prose-a:text-red-500 prose-code:text-red-400 prose-pre:bg-zinc-950 prose-pre:border prose-pre:border-zinc-800"
               dangerouslySetInnerHTML={getMarkup(markdownContent)}
