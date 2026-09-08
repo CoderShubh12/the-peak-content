@@ -28,12 +28,57 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  // 🏢 Organization & Website Schema Markup
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "NewsMediaOrganization",
+    name: "The Peak Content",
+    url: "https://thepeakcontent.in",
+    logo: {
+      "@type": "ImageObject",
+      url: "https://thepeakcontent.in/logo.png",
+    },
+    sameAs: [
+      "https://twitter.com/thepeakcontent",
+      "https://facebook.com/thepeakcontent",
+    ],
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "Editorial Desk",
+      email: "editor@thepeakcontent.in",
+    },
+  };
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "The Peak Content",
+    url: "https://thepeakcontent.in",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: "https://thepeakcontent.in/?q={search_term_string}",
+      "query-input": "required name=search_term_string",
+    },
+  };
+
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
+        {/* 🚀 JSON-LD Structured Data for Website & Organization */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
+
         {/* Google tag (gtag.js) */}
         <script
           src="https://analytics.ahrefs.com/analytics.js"

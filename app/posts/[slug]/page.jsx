@@ -202,6 +202,41 @@ export default async function BlogPostPage({ params }) {
     notFound();
   }
 
+  // 🔍 NewsArticle JSON-LD Schema Markup
+  const plainDescription = post.content
+    ? post.content.replace(/[#*`_]/g, "").substring(0, 160)
+    : "";
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: post.title,
+    description: plainDescription,
+    image: [
+      "https://thepeakcontent.in/logo.png", // Aap yahan default banner ya post image laga sakte hain
+    ],
+    datePublished: post.date,
+    dateModified: post.date,
+    author: [
+      {
+        "@type": "Person",
+        name: post.author || "The Peak Editorial Desk",
+      },
+    ],
+    publisher: {
+      "@type": "Organization",
+      name: "The Peak Content",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://thepeakcontent.in/logo.png",
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://thepeakcontent.in/posts/${slug}`,
+    },
+  };
+
   let htmlContent = "";
 
   if (post.isMarkdown) {
@@ -236,6 +271,12 @@ export default async function BlogPostPage({ params }) {
 
   return (
     <main className="bg-[#050507] text-zinc-50 min-h-screen py-24 px-6 selection:bg-red-600 selection:text-white">
+      {/* 🚀 JSON-LD Schema Script Injection */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       <div className="max-w-3xl mx-auto space-y-8">
         {/* Back Link */}
         <Link
@@ -259,7 +300,7 @@ export default async function BlogPostPage({ params }) {
         </div>
 
         {/* Title */}
-        <h1 className="text-3xl sm:text-5xl font-black text-zinc-100 tracking-tight leading-[1.1]">
+        <h1 className="text-3xl sm:text-5xl font-black text-zinc-150 tracking-tight leading-[1.1]">
           {post.title}
         </h1>
 
