@@ -2,45 +2,16 @@ import mongoose from "mongoose";
 
 const PostSchema = new mongoose.Schema(
   {
-    title: {
-      type: String,
-      required: [true, "Please provide a title"],
-      trim: true,
-      maxlength: [150, "Title cannot be more than 150 characters"],
-    },
-    slug: {
-      type: String,
-      required: true,
-      unique: true,
-      index: true,
-    },
-    category: {
-      type: String,
-      required: true,
-      enum: ["Tech", "Gaming", "SEO & Marketing", "AI & Development"],
-      default: "Tech",
-    },
-    content: {
-      type: String,
-      required: [true, "Post content is required"],
-    },
-    language: {
-      type: String,
-      enum: ["en", "hi"],
-      default: "en",
-    },
-    isPriority: {
-      type: Boolean,
-      default: false,
-    },
-    author: {
-      type: String,
-      default: "The Peak Editorial Desk",
-    },
+    title: { type: String, required: true },
+    slug: { type: String, required: true, unique: true },
+    snippet: { type: String },
+    content: { type: String, required: true },
+    category: { type: String, required: true, default: "tech" },
+    subcategory: { type: String, required: true }, // jaise: coding, ai-ml, digital-marketing, etc.
+    image: { type: String }, // Cloudinary Image URL yahan save hoga
+    author: { type: String, default: "Editorial Desk" },
   },
-  {
-    timestamps: true,
-  },
+  { timestamps: true },
 );
 
 export default mongoose.models.Post || mongoose.model("Post", PostSchema);
