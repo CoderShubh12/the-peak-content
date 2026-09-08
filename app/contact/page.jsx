@@ -35,6 +35,9 @@ export default function ContactPage() {
       directEmailSub:
         "Prefer sending a direct email? Click below to open Gmail instantly:",
       openGmailBtn: "Open Gmail",
+      seoHeading: "Editorial Desk & Media Inquiries Framework",
+      seoText:
+        "The Peak Content operates an active news bureau in Bhopal, Madhya Pradesh, delivering independent reports, technology analysis, and current affairs. Use our official contact channels for verified news tips, press releases, media partnerships, advertising collaborations, and corrections.",
     },
     hi: {
       headline: "न्यूज़रूम",
@@ -52,6 +55,9 @@ export default function ContactPage() {
       directEmailSub:
         "सीधे ईमेल भेजना चाहते हैं? तुरंत जीमेल खोलने के लिए नीचे क्लिक करें:",
       openGmailBtn: "जीमेल खोलें",
+      seoHeading: "संपादकीय डेस्क और मीडिया पूछताछ दिशा-निर्देश",
+      seoText:
+        "द पीक कंटेंट भोपाल, मध्य प्रदेश से स्वतंत्र रिपोर्टिंग, तकनीकी विश्लेषण और करेंट अफेयर्स का संचालन करता है। सत्यापित न्यूज़ टिप्स, प्रेस विज्ञप्ति, मीडिया पार्टनरशिप, विज्ञापन सहयोग और सुधार के लिए हमारे आधिकारिक संपर्क माध्यमों का उपयोग करें।",
     },
   }[lang];
 
@@ -60,7 +66,10 @@ export default function ContactPage() {
       {/* Newspaper Header */}
       <header className="border-b-4 border-zinc-100 pb-8 mb-12 text-center max-w-6xl mx-auto">
         <span className="text-xs font-mono font-bold uppercase tracking-[0.3em] text-red-500 block mb-3">
-          // {lang === "hi" ? "आधिकारिक संपर्क" : "Official Directory"}
+          //{" "}
+          {lang === "hi"
+            ? "आधिकारिक संपर्क और सहायता"
+            : "Official Directory & Support"}
         </span>
         <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter">
           {content.headline}
@@ -134,7 +143,7 @@ export default function ContactPage() {
       </section>
 
       {/* Interactive Contact Form Section */}
-      <section className="max-w-3xl mx-auto bg-zinc-900/40 border border-zinc-800/80 backdrop-blur-xl p-8 md:p-12 rounded-2xl shadow-2xl relative overflow-hidden">
+      <section className="max-w-3xl mx-auto bg-zinc-900/40 border border-zinc-800/80 backdrop-blur-xl p-8 md:p-12 rounded-2xl shadow-2xl relative overflow-hidden mb-12">
         <div className="absolute top-0 right-0 w-40 h-40 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="mb-8 border-b border-zinc-800 pb-4">
@@ -190,6 +199,16 @@ export default function ContactPage() {
             )}
           </div>
         </form>
+      </section>
+
+      {/* SEO-Optimized Contextual Footer Box */}
+      <section className="max-w-3xl mx-auto bg-zinc-900/30 border border-zinc-800/60 p-6 md:p-8 rounded-2xl">
+        <h4 className="text-base font-bold text-zinc-200 mb-2">
+          {content.seoHeading}
+        </h4>
+        <p className="text-zinc-400 text-sm leading-relaxed">
+          {content.seoText}
+        </p>
       </section>
     </main>
   );

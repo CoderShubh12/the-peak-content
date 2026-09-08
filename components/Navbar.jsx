@@ -38,6 +38,12 @@ export default function Navbar() {
           >
             {lang === "hi" ? "विचार (Opinions)" : "Opinions"}
           </Link>
+          <Link
+            href="/tech-and-gaming"
+            className="hover:text-red-500 transition-colors"
+          >
+            {lang === "hi" ? "टेक & गेमिंग" : "Tech & Gaming"}
+          </Link>
           <Link href="/about" className="hover:text-red-500 transition-colors">
             {lang === "hi" ? "हमारे बारे में" : "About Us"}
           </Link>
@@ -102,6 +108,13 @@ export default function Navbar() {
               className="hover:text-red-500 transition-colors py-2 border-b border-zinc-900"
             >
               {lang === "hi" ? "विचार (Opinions)" : "Opinions"}
+            </Link>
+            <Link
+              href="/tech-and-gaming"
+              onClick={() => setMobileMenuOpen(false)}
+              className="hover:text-red-500 transition-colors py-2 border-b border-zinc-900"
+            >
+              {lang === "hi" ? "टेक & गेमिंग" : "Tech & Gaming"}
             </Link>
             <Link
               href="/about"
